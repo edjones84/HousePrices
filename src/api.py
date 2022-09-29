@@ -25,7 +25,7 @@ class HousePriceIndexAPI:
 
         # loop to do api call each month for 240 months so 20 years and only output every 1 months
         global url_tmp
-        years = 10
+        years = 20
         months = years * 12
         interval = 1
 
