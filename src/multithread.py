@@ -19,6 +19,16 @@ class MultiThreadAPI:
         self.url_list = url_list
 
     @staticmethod
+    def get_set_event_loop():
+        try:
+            return asyncio.get_event_loop()
+        except RuntimeError as e:
+            if e.args[0].startswith('There is no current'):
+                asyncio.set_event_loop(asyncio.new_event_loop())
+                return asyncio.get_event_loop()
+            raise e
+
+    @staticmethod
     def fetch(session, url: str):
         """Private method that will run the request to the api call and return json data"""
         base_url = url
@@ -33,12 +43,12 @@ class MultiThreadAPI:
     async def get_data_asynchronous(self) -> List[str]:
         """This will implement the multithreading"""
 
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        with ThreadPoolExecutor(max_workers=8) as executor:
             with requests.Session() as session:
                 # Set any session parameters here before calling `fetch`
 
                 # Initialize the event loop
-                loop = asyncio.get_event_loop()
+                loop = self.get_set_event_loop()
 
                 # Set the START_TIME for the `fetch` function
                 START_TIME = default_timer()
@@ -63,7 +73,7 @@ class MultiThreadAPI:
 
     def run_api_threads(self):
         """This will implement the loop which multithreads and outputs data"""
-        loop = asyncio.get_event_loop()
+        loop = self.get_set_event_loop()
         future = asyncio.ensure_future(self.get_data_asynchronous())
         loop.run_until_complete(future)
         data = future.result()

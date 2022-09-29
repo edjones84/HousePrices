@@ -9,3 +9,4 @@ plotly~=5.10.0
 Flask-Caching~=2.0.1
 Flask-WTF~=1.01
 WTForms~=3.0.1
+beautifulsoup4~=4.11.1

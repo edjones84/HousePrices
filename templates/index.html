@@ -3,12 +3,11 @@
 
 <body style="font-family:arial, sans-serif">
     <h1 style="background:lightblue;padding:10px">
-            Property Forecasting
+            Property Forecasting for your postcode
     </h1>
-    <p>Submit Postcode and click to see charts on different pages</p>
 
-    <h1><a href="{{ url_for('chart1',postcode = form.postcode) }}">House Price Index Forecast</a></h1>
-    <h1><a href="{{ url_for('chart2',postcode = form.postcode) }}">Price Forecast</a></h1>
+    <h1><a href="chart1">House Price Index Forecast</a></h1>
+    <h1><a href="chart2">Price Forecast</a></h1>
 
 
 </body>

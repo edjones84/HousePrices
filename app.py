@@ -1,14 +1,16 @@
 import json
+from dataclasses import dataclass
 
 import pandas as pd
 import plotly
 import plotly.graph_objects as go
-from flask import Flask, render_template, request, url_for, flash, redirect
-from flask_caching import Cache
+from bs4 import BeautifulSoup
 from flask import Flask, render_template, redirect, url_for
+from flask import request, flash
+from flask_caching import Cache
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, InputRequired, Length
+from wtforms import StringField
+from wtforms.validators import InputRequired, Length
 
 from src.api import HousePriceIndexAPI
 from src.dataframe import InputDataFrame
@@ -44,19 +46,37 @@ def dataframes(test: bool = True, postcode: str = TEST_POSTCODE, ) -> dict:
 
 class PostCodeForm(FlaskForm):
     postcode = StringField('postcode', validators=[InputRequired(),
-                                                   Length(min=10, max=100)])
+                                                   Length(min=5, max=100)])
+
+
+@dataclass
+class Postcode:
+    postcode: str
 
 
 @app.route('/', methods=["GET", "POST"])
+def postcode():
+    form = PostCodeForm(request.form)
+    if request.method == 'POST':
+        flash('Thanks for submitting')
+        Postcode.postcode = form.postcode
+        return redirect(url_for('index'))
+    return render_template("postcode.html",form=form)
+
+
+@app.route('/index', methods=["GET", "POST"])
 def index():
-    form = PostCodeForm()
-    return render_template('index.html', form=form)
+    return render_template('index.html')
 
 
 @app.route('/chart1')
 @cache.cached(timeout=600)
-def chart1(postcode: str):
-    data_dict = dataframes(postcode=postcode, test=False)
+def chart1():
+    postcode_html = str(Postcode.postcode)
+    soup = BeautifulSoup(postcode_html, 'html.parser')
+    postcode = soup.find('input')['value']
+    print(postcode)
+    data_dict = dataframes(postcode=str(postcode), test=False)
     df_global = data_dict["hpi_global_df"]
     df_regional = data_dict["hpi_regional_df"]
     fig = go.Figure()
@@ -87,8 +107,13 @@ def chart1(postcode: str):
 
 @app.route('/chart2')
 @cache.cached(timeout=600)
-def chart2(postcode: str):
-    data_dict = dataframes(postcode=postcode, test=False)
+def chart2():
+    postcode_html = str(Postcode.postcode)
+    soup = BeautifulSoup(postcode_html, 'html.parser')
+    postcode = soup.find('input')['value']
+
+    print(postcode)
+    data_dict = dataframes(postcode=str(postcode), test=False)
     df_global = data_dict["prices_global_df"]
     df_regional = data_dict["prices_regional_df"]
     fig = go.Figure()
