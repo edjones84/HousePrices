@@ -11,7 +11,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 def forecaster(dataframe: DataFrame) -> DataFrame:
     """This uses neural prophet https://github.com/ourownstory/neural_prophet to model the future house price data for both
-        raw prices and the HPI (house price index) 10 years in the future
+    raw prices and the HPI (house price index) 10 years in the future
                 Parameters @param
                 ----------
                     dataframe : pd.Dataframe

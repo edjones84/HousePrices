@@ -8,4 +8,4 @@ if __name__ == '__main__':
     dataframe = pd.read_csv("resources/example.csv")
     in_df = InputDataFrame(dataframe=dataframe)
     out_dataframes = apply(in_df)
-    print(out_dataframes)
+    print(out_dataframes.get("average_price_global"))
