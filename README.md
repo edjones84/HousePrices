@@ -1,3 +1,4 @@
+![Build status](https://github.com/edjones84/future-house-prices/actions/workflows/python-package-conda.yml/badge.svg?event=push)
 ![Screenshot 2022-09-30 at 10 07 24](https://user-images.githubusercontent.com/78102381/193235557-2b2f44f4-7fbf-432a-b51b-56714d0d4e2b.png)
 
 
