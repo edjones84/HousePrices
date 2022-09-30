@@ -1,4 +1,5 @@
-![Screenshot 2022-09-30 at 09 52 15](https://user-images.githubusercontent.com/78102381/193234599-8a9acb98-6d32-4da0-88f8-f4bc916c340b.png)
+![Screenshot 2022-09-30 at 10 07 24](https://user-images.githubusercontent.com/78102381/193235557-2b2f44f4-7fbf-432a-b51b-56714d0d4e2b.png)
+
 
 This repository contains a number of very useful functions/classes/code to help predict the future of the housing market
 . The following functionality is present:
