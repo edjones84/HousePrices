@@ -30,4 +30,7 @@ python -m flask run
 5. You will then be prompted with what chart you would like to see (see image above). When you click either of these 
 neural prophet is then "deployed". This data is then cached for future viewing
 
+Example graph for a postcode in Somerset:
+![Screenshot 2022-09-30 at 10 54 44](https://user-images.githubusercontent.com/78102381/193245148-d188b9b4-0484-4341-97a9-e1e008b97363.png)
+
 
