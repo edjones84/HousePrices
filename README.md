@@ -7,7 +7,8 @@ This repository contains a number of very useful functions/classes/code to help 
 - forecaster class that utilises neural prophet, this "NeuralProphet bridges the gap between traditional time-series models and deep learning methods. It's based on PyTorch and can be installed using pip." https://neuralprophet.com/html/index.html
 - a locally hosted web interface via Flask to enter your postcode and view the data
 
-1. A house price index (HPI) measures the price changes of residential housing as a percentage change from some specific start date (which has an HPI of 100). Methodologies commonly used to calculate an HPI are hedonic regression (HR), simple moving average (SMA), and repeat-sales regression (RSR).
+
+<sup>1</sup>  A house price index (HPI) measures the price changes of residential housing as a percentage change from some specific start date (which has an HPI of 100). Methodologies commonly used to calculate an HPI are hedonic regression (HR), simple moving average (SMA), and repeat-sales regression (RSR).
 
 
 ### Setup/ Running
@@ -15,12 +16,16 @@ This repository contains a number of very useful functions/classes/code to help 
 ```
 pip install -r requirements
 ```
+
 2. Run flask app:
 ```
 python -m flask run 
 ```
+
 3. Go to your local host: http://127.0.0.1:5000/
+
 4. Enter your postcode
+
 5. You will then be prompted with what chart you would like to see (see image below). When you click either of these 
 neural prophet is then "deployed". 
 This data is then cached for future viewing
