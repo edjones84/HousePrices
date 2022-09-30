@@ -24,4 +24,3 @@ python -m flask run
 5. You will then be prompted with what chart you would like to see (see image below). When you click either of these 
 neural prophet is then "deployed". 
 This data is then cached for future viewing
-![img_2.png](img_2.png)
