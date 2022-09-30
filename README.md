@@ -5,7 +5,7 @@ This repository contains a number of very useful functions/classes/code to help 
 . The following functionality is present:
 - api class to retrieve the last 20 years of house price data for both the local area and your country (https://www.landregistry.data.gov.uk/data/ukhpi/region). This house price data consists of both the House Price Index<sup>1</sup> and the average property price
 - multithread class that allows for multithreading of api calls to the land registry
-- forecaster class that utilises neural prophet, this "NeuralProphet bridges the gap between traditional time-series models and deep learning methods. It's based on PyTorch and can be installed using pip." https://neuralprophet.com/html/index.html
+- forecaster class that utilises neural prophet - making predictions 5 years in the future - "NeuralProphet bridges the gap between traditional time-series models and deep learning methods. It's based on PyTorch and can be installed using pip." https://neuralprophet.com/html/index.html
 - a locally hosted web interface via Flask to enter your postcode and view the data
 
 

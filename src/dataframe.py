@@ -31,6 +31,9 @@ class InputDataFrame:
     def renamed_df(self) -> DataFrame:
         return self.dataframe.rename(columns={self.month_column: self.prophet_month_column})
 
+    def get_region(self) -> str:
+        return self.dataframe["region"].iloc[0]
+
 
 def dataframe_out(dataframe: InputDataFrame, y_column: str) -> DataFrame:
     """specify the column you want as the values from the list:

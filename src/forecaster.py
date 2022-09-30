@@ -22,8 +22,8 @@ def forecaster(dataframe: DataFrame) -> DataFrame:
                         dataframe or dict of dataframes containing column ``ds``, ``y`` and ``yhat1``  """
     m = NeuralProphet()
     df_fit = m.fit(dataframe, "M")
-    # 10 years in the future
-    df_future = m.make_future_dataframe(dataframe, periods=10 * 12)
+    # 5 years in the future
+    df_future = m.make_future_dataframe(dataframe, periods=5 * 12)
     forecast = m.predict(df=df_future)
     dataframe['ythat'] = None
     forecast_df = forecast[['ds', 'y', 'yhat1']]
@@ -44,9 +44,11 @@ def apply(dataframe: InputDataFrame) -> dict:
 
             Returns
             -------
-            returns a dictionary of 4 dataframes for HPI global and regional and the raw prices global and reginal"""
+            returns a dictionary of 4 dataframes for HPI global and regional and the raw prices global
+            and regional and the actual region"""
 
     return {"hpi_regional_df": forecaster(dataframe_out(dataframe, dataframe.hpi_regional_column)),
             "hpi_global_df": forecaster(dataframe_out(dataframe, dataframe.hpi_global_column)),
             "prices_global_df": forecaster(dataframe_out(dataframe, dataframe.price_global_column)),
-            "prices_regional_df": forecaster(dataframe_out(dataframe, dataframe.price_regional_column))}
+            "prices_regional_df": forecaster(dataframe_out(dataframe, dataframe.price_regional_column)),
+            "region": dataframe.get_region()}

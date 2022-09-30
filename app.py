@@ -69,21 +69,21 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/chart1')
+@app.route('/index/chart1')
 @cache.cached(timeout=600)
 def chart1():
     postcode_html = str(Postcode.postcode)
     soup = BeautifulSoup(postcode_html, 'html.parser')
     postcode = soup.find('input')['value']
-    print(postcode)
     data_dict = dataframes(postcode=str(postcode), test=False)
+    region = data_dict["region"]
     df_global = data_dict["hpi_global_df"]
     df_regional = data_dict["hpi_regional_df"]
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["y"], name="Actual (global)", mode="lines"))
     fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["yhat1"], name="Forecasted (global)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name="Actual (regional)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name="Forecasted (regional)", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name=f"Actual ({region})", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name=f"Forecasted ({region})", mode="lines"))
     fig.update_layout(
         title="House Price Index over time", xaxis_title="Time", yaxis_title="House Price Index"
     )
@@ -105,22 +105,21 @@ def chart1():
     return render_template('graph.html', graphJSON=graphJSON, header=header, description=description)
 
 
-@app.route('/chart2')
+@app.route('/index/chart2')
 @cache.cached(timeout=600)
 def chart2():
     postcode_html = str(Postcode.postcode)
     soup = BeautifulSoup(postcode_html, 'html.parser')
     postcode = soup.find('input')['value']
-
-    print(postcode)
     data_dict = dataframes(postcode=str(postcode), test=False)
+    region = data_dict["region"]
     df_global = data_dict["prices_global_df"]
     df_regional = data_dict["prices_regional_df"]
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_global["y"], name="Actual (global)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["yhat1"], name="Forecasted (global)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name="Actual (regional)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name="Forecasted (regional)", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_global["y"], name="Actual (UK)", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["yhat1"], name="Forecasted (UK)", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name=f"Actual ({region})", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name=f"Forecasted ({region})", mode="lines"))
     fig.update_layout(
         title="Average Price over time", xaxis_title="Time", yaxis_title="£"
     )
