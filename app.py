@@ -9,6 +9,8 @@ from flask import Flask, render_template, redirect, url_for
 from flask import request, flash
 from flask_caching import Cache
 from flask_wtf import FlaskForm
+from pandas import DataFrame
+from plotly.graph_objs import Figure
 from wtforms import StringField
 from wtforms.validators import InputRequired, Length
 
@@ -49,6 +51,22 @@ class PostCodeForm(FlaskForm):
                                                    Length(min=5, max=100)])
 
 
+def get_postcode(postcode_html: str):
+    soup = BeautifulSoup(postcode_html, 'html.parser')
+    return soup.find('input')['value']
+
+
+def add_fig_lines(fig: Figure, data_dict: dict) -> None:
+    """helper function to render the graph"""
+    region = data_dict["region"]
+    df_global = data_dict["hpi_global_df"]
+    df_regional = data_dict["hpi_regional_df"]
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_global["y"], name="Actual (UK)", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["yhat1"], name="Forecasted (UK)", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name=f"Actual ({region})", mode="lines"))
+    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name=f"Forecasted ({region})", mode="lines"))
+
+
 @dataclass
 class Postcode:
     postcode: str
@@ -61,7 +79,7 @@ def postcode():
         flash('Thanks for submitting')
         Postcode.postcode = form.postcode
         return redirect(url_for('index'))
-    return render_template("postcode.html",form=form)
+    return render_template("postcode.html", form=form)
 
 
 @app.route('/index', methods=["GET", "POST"])
@@ -72,24 +90,12 @@ def index():
 @app.route('/index/chart1')
 @cache.cached(timeout=600)
 def chart1():
-    postcode_html = str(Postcode.postcode)
-    soup = BeautifulSoup(postcode_html, 'html.parser')
-    postcode = soup.find('input')['value']
-    data_dict = dataframes(postcode=str(postcode), test=False)
-    region = data_dict["region"]
-    df_global = data_dict["hpi_global_df"]
-    df_regional = data_dict["hpi_regional_df"]
+    data_dict = dataframes(postcode=str(get_postcode(str(Postcode.postcode))), test=False)
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["y"], name="Actual (global)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["yhat1"], name="Forecasted (global)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name=f"Actual ({region})", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name=f"Forecasted ({region})", mode="lines"))
+    add_fig_lines(fig=fig, data_dict=data_dict)
     fig.update_layout(
         title="House Price Index over time", xaxis_title="Time", yaxis_title="House Price Index"
     )
-
-    # fig = px.line(df, x="ds", y=df.columns[1, 2]).update_layout(xaxis_title="Time", yaxis_title="House Price Index")
-
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     header = "House Price Index"
     description = """
@@ -108,18 +114,9 @@ def chart1():
 @app.route('/index/chart2')
 @cache.cached(timeout=600)
 def chart2():
-    postcode_html = str(Postcode.postcode)
-    soup = BeautifulSoup(postcode_html, 'html.parser')
-    postcode = soup.find('input')['value']
-    data_dict = dataframes(postcode=str(postcode), test=False)
-    region = data_dict["region"]
-    df_global = data_dict["prices_global_df"]
-    df_regional = data_dict["prices_regional_df"]
+    data_dict = dataframes(postcode=str(get_postcode(str(Postcode.postcode))), test=False)
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_global["y"], name="Actual (UK)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_global["ds"], y=df_global["yhat1"], name="Forecasted (UK)", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["y"], name=f"Actual ({region})", mode="lines"))
-    fig.add_trace(go.Scatter(x=df_regional["ds"], y=df_regional["yhat1"], name=f"Forecasted ({region})", mode="lines"))
+    add_fig_lines(fig=fig, data_dict=data_dict)
     fig.update_layout(
         title="Average Price over time", xaxis_title="Time", yaxis_title="£"
     )
