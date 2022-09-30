@@ -1,4 +1,4 @@
-# Predict Future House Prices
+![Screenshot 2022-09-30 at 09 52 15](https://user-images.githubusercontent.com/78102381/193234599-8a9acb98-6d32-4da0-88f8-f4bc916c340b.png)
 
 This repository contains a number of very useful functions/classes/code to help predict the future of the housing market
 . The following functionality is present:
@@ -26,6 +26,7 @@ python -m flask run
 
 4. Enter your postcode
 
-5. You will then be prompted with what chart you would like to see (see image below). When you click either of these 
-neural prophet is then "deployed". 
-This data is then cached for future viewing
+5. You will then be prompted with what chart you would like to see (see image above). When you click either of these 
+neural prophet is then "deployed". This data is then cached for future viewing
+
+
